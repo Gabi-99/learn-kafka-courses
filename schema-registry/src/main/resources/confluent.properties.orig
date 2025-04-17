@@ -1,15 +1,16 @@
-# This is a placeholder for storing the properties needed to connect to Confluent Cloud
-# Create a new properties file by copying this file to one named confluent.properties
-# The confluent.properties file is ignored by Git - never checkin your credentials!
-
-# You can fill out these properties individually or copy/paste the config file generated
-# on Confluent Cloud when setting up the cluster from the client setup section
-
-
-sasl.mechanism=PLAIN
+# Kafka cluster connection configs
+bootstrap.servers=pkc-nq356.eu-south-2.aws.confluent.cloud:9092
 security.protocol=SASL_SSL
-bootstrap.servers=
-sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username='XXXX' password='XXXXXXX';
+sasl.mechanism=PLAIN
+sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username='HE6LNLLN5NKOA6Z2' password='LIeMaSgXyQsxFwbfCZsayH1paLw1JmYdA5zslGRBuk4pz+wqq1r1HZM+QuHa5BTG';
+
+# Optional Kafka settings
+client.dns.lookup=use_all_dns_ips
+session.timeout.ms=45000
+acks=all
+client.id=ccloud-java-client-${user.name}
+
+# Schema Registry connection configs
+schema.registry.url=https://psrc-qjmzd.us-east-2.aws.confluent.cloud
 basic.auth.credentials.source=USER_INFO
-schema.registry.url=
-basic.auth.user.info=XXXXX:XXXX
+basic.auth.user.info=HFJ5PRBHNAQV4OZY:zPEZ3WZ6VNNWmV8b/ik9/s5Lrz+cN4dn+IMAMwVXXAPEDv/JWXhGBkPJBJhmrqMA

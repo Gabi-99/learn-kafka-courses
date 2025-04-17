@@ -3,4 +3,9 @@ syntax = "proto3";
 package io.confluent.developer.proto;
 option java_outer_classname = "PurchaseProto";
 
-// Complete this file by adding the message implementation as directed in the course
+// Mensaje que representa una compra
+message Purchase {
+  string item = 1;          // Nombre del producto
+  double total_cost = 2;    // Precio del producto
+  string customer_id = 3;   // ID del cliente
+}

@@ -26,14 +26,14 @@ public class ConsumerApp {
          consumerConfigs.put(ConsumerConfig.GROUP_ID_CONFIG, "schema-registry-course-consumer");
          consumerConfigs.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-         consumerConfigs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "<Replace this with key deserializer class>");
-         consumerConfigs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "<Replace this with value deserializer class>");
+         consumerConfigs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+         consumerConfigs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaProtobufDeserializer.class);
          consumerConfigs.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, Purchase.class );
-         
-        // Duplication of configs loaded from confluent.properties to emphasize what's needed to use SchemaRegistry
-         consumerConfigs.put("schema.registry.url", "<Replace this with schema.registry.url value from confluent.properties>");
+
+         consumerConfigs.put("schema.registry.url", "https://psrc-qjmzd.us-east-2.aws.confluent.cloud");
          consumerConfigs.put("basic.auth.credentials.source", "USER_INFO");
-         consumerConfigs.put("basic.auth.user.info", "<Replace this with basic.auth.user.info value from confluent.properties>");
+         consumerConfigs.put("basic.auth.user.info", "HFJ5PRBHNAQV4OZY:zPEZ3WZ6VNNWmV8b/ik9/s5Lrz+cN4dn+IMAMwVXXAPEDv/JWXhGBkPJBJhmrqMA");
+
 
          try(Consumer<String, Purchase> consumer = new KafkaConsumer<>(consumerConfigs)){
              consumer.subscribe(Collections.singletonList("proto-purchase"));

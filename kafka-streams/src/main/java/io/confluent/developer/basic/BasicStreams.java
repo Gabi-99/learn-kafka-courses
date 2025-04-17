@@ -1,5 +1,6 @@
-package io.confluent.developer.basic;
+package io.confluent.developer.basic.solution;
 
+import io.confluent.developer.basic.TopicLoader;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -18,7 +19,6 @@ public class BasicStreams {
 
     public static void main(String[] args) throws IOException {
         Properties streamsProps = new Properties();
-        // Make sure you've added your Confluent Cloud credentials as outlined in the README
         try (FileInputStream fis = new FileInputStream("src/main/resources/streams.properties")) {
             streamsProps.load(fis);
         }
@@ -29,17 +29,14 @@ public class BasicStreams {
         final String outputTopic = streamsProps.getProperty("basic.output.topic");
 
         final String orderNumberStart = "orderNumber-";
-        // Using the StreamsBuilder from above, create a KStream with an input-topic
-        // and a Consumed instance with the correct
-        // Serdes for the key and value HINT: builder.stream and Serdes.String()
-        KStream<String, String> firstStream = null;
+        KStream<String, String> firstStream = builder.stream(inputTopic, Consumed.with(Serdes.String(), Serdes.String()));
 
         firstStream.peek((key, value) -> System.out.println("Incoming record - key " + key + " value " + value))
-                // filter records by making sure they contain the orderNumberStart variable from above HINT: use filter
-                // map the value to a new string by removing the orderNumberStart portion HINT: use mapValues
-                // only forward records where the value is 1000 or greater HINT: use filter and Long.parseLong
-                .peek((key, value) -> System.out.println("Outgoing record - key " + key + " value " + value));
-                // Write the results to an output topic defined above as outputTopic HINT: use "to" and Produced and Serdes.String()
+                .filter((key, value) -> value.contains(orderNumberStart))
+                .mapValues(value -> value.substring(value.indexOf("-") + 1))
+                .filter((key, value) -> Long.parseLong(value) > 1000)
+                .peek((key, value) -> System.out.println("Outgoing record - key " + key + " value " + value))
+                .to(outputTopic, Produced.with(Serdes.String(), Serdes.String()));
 
         try (KafkaStreams kafkaStreams = new KafkaStreams(builder.build(), streamsProps)) {
             final CountDownLatch shutdownLatch = new CountDownLatch(1);
@@ -59,4 +56,3 @@ public class BasicStreams {
         System.exit(0);
     }
 }
-

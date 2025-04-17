@@ -32,15 +32,14 @@ public class ProducerApp {
         Map<String, Object> producerConfigs = new HashMap<>();
         properties.forEach((key, value) -> producerConfigs.put((String) key, value));
 
-        producerConfigs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "<Replace this with key serializer class>");
-        producerConfigs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "<Replace this with value serializer class>");
-        // Setting schema auto-registration to false since we already registered the schema manually following best practice
-        producerConfigs.put(AbstractKafkaSchemaSerDeConfig.AUTO_REGISTER_SCHEMAS, false);
+        producerConfigs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+producerConfigs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaProtobufSerializer.class);
+producerConfigs.put(AbstractKafkaSchemaSerDeConfig.AUTO_REGISTER_SCHEMAS, false);
 
-        // Duplication of configs loaded from confluent.properties to emphasize what's needed to use SchemaRegistry
-        producerConfigs.put("schema.registry.url", "<Replace this with schema.registry.url value from confluent.properties>");
-        producerConfigs.put("basic.auth.credentials.source", "USER_INFO");
-        producerConfigs.put("basic.auth.user.info", "<Replace this with basic.auth.user.info value from confluent.properties>");
+// Duplication of configs loaded from confluent.properties to emphasize what's needed to use SchemaRegistry
+producerConfigs.put("schema.registry.url", "https://psrc-qjmzd.us-east-2.aws.confluent.cloud");
+producerConfigs.put("basic.auth.credentials.source", "USER_INFO");
+producerConfigs.put("basic.auth.user.info", "HFJ5PRBHNAQV4OZY:zPEZ3WZ6VNNWmV8b/ik9/s5Lrz+cN4dn+IMAMwVXXAPEDv/JWXhGBkPJBJhmrqMA");
 
         System.out.printf("Producer now configured for using SchemaRegistry %n");
         try (final Producer<String, Purchase> producer = new KafkaProducer<>(producerConfigs)) {
